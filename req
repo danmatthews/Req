@@ -1,0 +1,9 @@
+#!/usr/bin/php
+<?php
+
+require dirname(__FILE__).'/vendor/autoload.php';
+require dirname(__FILE__).'/src/Requiem.php';
+
+// Start your engines.
+new Requiem();
+
