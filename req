@@ -4,6 +4,57 @@
 require dirname(__FILE__).'/vendor/autoload.php';
 require dirname(__FILE__).'/src/Requiem.php';
 
-// Start your engines.
-new Requiem();
+// Create a commando command.
+$cmd = new Commando\Command();
+
+//Add the filename argument
+$cmd->option()
+	->referToAs('Filename: ')
+	->describedAs("The request JSON file")
+	->require()
+	->must(function($filename)
+	{
+
+		// Load the file, check that it exists.
+		if (!is_file($filename))
+		{
+			return false;
+		}
+
+		$contents = file_get_contents($filename);
+
+		if (!is_string($contents) || strlen($contents) < 2)
+		{
+			return false;
+		}
+
+		$json = json_decode($contents);
+
+		if (!is_object($json) && !is_array($json))
+		{
+			return false;
+		}
+
+		return true;
+
+	});
+
+// Add a 'test only' mode.
+$cmd->option('v')
+	->aka('validate-only')
+	->boolean();
+
+$req = new Requiem($cmd[0]);
+
+if ($cmd['v'] ==1)
+{
+	if (!$req->validate()) {
+
+	}
+}
+else {
+	$req->makeRequest();
+}
+
+
 

@@ -2,75 +2,79 @@
 
 class Requiem {
 
-	public function __construct()
+	protected $filename;
+
+	protected $json;
+
+	protected $valid_params = array(
+		'url',
+		'method',
+		'data',
+		'auth' => array(
+			'type',
+			'username',
+			'password'
+		),
+		'headers',
+	);
+
+	public function __construct($filename)
 	{
-
-		$cmd = new Commando\Command();
-
-		$cmd->option()
-			->referToAs('Filename: ')
-			->describedAs("The request JSON file")
-			->require()
-			->must(function($filename)
-			{
-				// Load the file, check that it exists.
-				if (!is_file($filename))
-				{
-					return false;
-				}
-				$contents = file_get_contents($filename);
-				if (!is_string($contents) || strlen($contents) < 2)
-				{
-					return false;
-				}
-				$json = json_decode($contents);
-				if (!is_object($json) && !is_array($json))
-				{
-					return false;
-				}
-				return true;
-			})
-			->option('v')
-			->aka('validate-only')
-			->boolean();
-
-		$this->setUp($cmd[0], $cmd);
-
+		$this->filename = $filename;
 	}
 
 	/**
-	 * Setup the RequiemRequest object.
-	 * @param string   $filename  The filepath to the request.json file
-	 * @param Command  $cmd       The commando app object.
+	 * Send the request.
 	 */
-	public function setUp($filename, $cmd)
+	public function makeRequest()
 	{
 
-		$json = json_decode(file_get_contents($filename));
-
-		$c = new \Colors\Color();
-
-		// Run the validation on the JSON
-		if ($this->validateJson($json))
+		if ($this->validate())
 		{
 
-			
+			$curl = curl_init($this->json->url);
 
-			// Is this set to validate only? Exit then.
-			if ($cmd['v'] == 1)
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+
+			if (!isset($json->method))
 			{
-				exit ($c('Validation complete, all OK.')->white()->highlight('green') . PHP_EOL);
+				curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
 			}
+			else if (strtolower ($json->method) == 'post') {
+				curl_setopt($curl, CURLOPT_POST, TRUE);
+			}
+			else if (strtolower ($json->method) == 'put') {
+				curl_setopt($curl, CURLOPT_PUT, TRUE);
+			}
+
+			$result = curl_exec($curl);
+
+			curl_close($curl);
 
 		}
 
 	}
 
-	public function validateJson($json)
+	/**
+	 * Validate the JSON.
+	 */
+	public function validate()
 	{
+
+		$json = json_decode(file_get_contents($this->filename));
 
 		$c = new \Colors\Color();
 
+		// Check it's parsed correctly.
+		if (!is_object($json) && !is_array($json))
+		{
+			exit ($c("Invalid JSON Provided")->white()->highlight('red').PHP_EOL);
+			return false;
+		}
+
+		// Check it has the required 'url' parameter.
 		if (!isset ($json->url) || !is_string ($json->url))
 		{
 			exit ($c("The 'url' parameter is missing from the JSON file, and is required.")->white()->highlight('red').PHP_EOL);
@@ -85,6 +89,8 @@ class Requiem {
 			}
 
 		}
+
+		$this->json = $json;
 
 		return true;
 
