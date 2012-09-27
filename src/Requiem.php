@@ -2,9 +2,16 @@
 
 class Requiem {
 
+	/**
+	 * [$filename description]
+	 * @var [type]
+	 */
 	protected $filename;
 
-	protected $json;
+	/**
+	 * Contains the request object.
+	 */
+	protected $data;
 
 	protected $valid_params = array(
 		'url',
@@ -32,28 +39,70 @@ class Requiem {
 		if ($this->validate())
 		{
 
-			$curl = curl_init($this->json->url);
+			$c = new \Colors\Color();
+
+			$curl = curl_init($this->data->url);
 
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 
 			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
 
-			if (!isset($json->method))
+			if (isset($this->data->headers) && count($this->data->headers) > 0)
 			{
-				curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
+				curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers());
 			}
-			else if (strtolower ($json->method) == 'post') {
+
+			if (strtolower ($this->data->method) == 'post') {
+				echo 'HERE';
 				curl_setopt($curl, CURLOPT_POST, TRUE);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $this->serializeData());
 			}
-			else if (strtolower ($json->method) == 'put') {
+			else if (strtolower ($this->data->method) == 'put') {
 				curl_setopt($curl, CURLOPT_PUT, TRUE);
+			}
+			else {
+				curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
 			}
 
 			$result = curl_exec($curl);
 
+			$info = curl_getinfo($curl);
+
 			curl_close($curl);
 
+			return array(
+				'body' => $result,
+				'data' => $info,
+			);
+
 		}
+
+	}
+
+	public function headers()
+	{
+
+		$headers = array();
+
+		foreach ($this->data->headers as $key => $value)
+		{
+			$headers[] = "{$key}: {$value}";
+		}
+
+		return $headers;
+
+	}
+
+	function serializeData()
+	{
+		$formData = array();
+
+		foreach ($this->data->data as $key => $value)
+		{
+			$formData[] = "$key=$value";
+		}
+
+		return implode("&", $formData);
 
 	}
 
@@ -90,7 +139,7 @@ class Requiem {
 
 		}
 
-		$this->json = $json;
+		$this->data = $json;
 
 		return true;
 
