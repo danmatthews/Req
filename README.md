@@ -8,7 +8,7 @@ Clone the repo, then use Composer to install the dependencies.
 
 You can then, if you like, use it from within the folder by calling `./req my-request.json`, or you can make it available system wide by symlinking it somewhere into your path:
 
-`sudo ln -s /path/to/req /usr/local/bin/req`
+    sudo ln -s /path/to/req /usr/local/bin/req`
 
 ## Usage
 
