@@ -6,7 +6,8 @@ class Requiem {
 	 * [$filename description]
 	 * @var [type]
 	 */
-	protected $filename;
+	public $filename;
+	public $json;
 
 	/**
 	 * Contains the request object.
@@ -25,9 +26,19 @@ class Requiem {
 		'headers',
 	);
 
-	public function __construct($filename)
+	public function __construct($filename = null)
 	{
 		$this->filename = $filename;
+	}
+
+	public function setFilename($filename)
+	{
+
+	}
+
+	public function setJson($raw_json)
+	{
+
 	}
 
 	/**
@@ -139,7 +150,7 @@ class Requiem {
 
 		}
 
-		$this->data = $json;
+		$this->json = $json;
 
 		return true;
 
