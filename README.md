@@ -4,7 +4,7 @@ Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to ma
 
 ## Installation.
 
-If you're wanting to use the `Req` class by itself, simply do the following:
+If you're wanting to use the `Req` class by itself, simply do the following, don't forget to include the `ReqResponse` class too!
 
 ```php
 include 'src/Req.php';
