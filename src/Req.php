@@ -39,23 +39,24 @@ class Req {
 
 			$curl = curl_init($this->opts['url']);
 
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($curl, CURLOPT_HEADER, 1);
-			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
-			if (isset($this->data->headers) && count($this->data->headers) > 0)
+			curl_setopt($curl, CURLOPT_HEADER, 1);
+
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+			if (isset($this->opts['headers']) && count($this->opts['headers']) > 0)
 			{
 				curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers());
 			}
 
-			if (strtolower ($type) == 'post') {
-				curl_setopt($curl, CURLOPT_POST, TRUE);
-				curl_setopt($curl, CURLOPT_POSTFIELDS, $this->serializeData());
+			if (strtolower ($type) == 'post')
+			{
+				curl_setopt($curl, CURLOPT_POST, 1);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $this->serializeData($params));
 			}
-			else if (strtolower ($type) == 'put') {
-				curl_setopt($curl, CURLOPT_PUT, TRUE);
-			}
-			else {
+			else
+			{
 				curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
 			}
 
@@ -89,7 +90,7 @@ class Req {
 	{
 		$formData = array();
 
-		foreach ($this->data->data as $key => $value)
+		foreach ($this->opts['data'] as $key => $value)
 		{
 			$formData[] = "$key=$value";
 		}

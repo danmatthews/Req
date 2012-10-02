@@ -8,19 +8,27 @@ class ReqResponse {
 
 	public $info;
 
-	public function __construct($body, $headers, $info) {
+	public function __construct($body, $headers, $info)
+	{
 
-		$split = explode("\r\n\r\n", $body);
-
-		$headers = $split[0];
+		list($headers, $body) = explode("\r\n\r\n", $body);
 
 		$headers = explode("\n", $headers);
 
-		$body = $split[1];
+		$headerList = array();
+
+		foreach ($headers as $header)
+		{
+			if (stristr($header, ':'))
+			{
+				list($key, $value) = explode(":", $header);
+				$headerList[$key] = trim($value);
+			}
+		}
 
 		$this->body = $body;
 
-		$this->headers = $headers;
+		$this->headers = $headerList;
 
 		$this->info = $info;
 	}

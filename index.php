@@ -12,6 +12,8 @@ $opts = array(
 	),
 );
 
-$req = new Req('http://danmatthews.me');
+$req = new Req('http://twitter.com/danmatthews');
 
 $response = $req->get();
+
+$response->inspect();
