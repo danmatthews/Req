@@ -1,6 +1,8 @@
 # Req
 
-Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongisde a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
+
+
+Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongisde a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
 
 ## Installation.
 
