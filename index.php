@@ -16,4 +16,4 @@ $req = new Req('http://twitter.com/danmatthews');
 
 $response = $req->get();
 
-$response->inspect();
+echo $response->body;
