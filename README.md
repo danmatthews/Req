@@ -1,10 +1,22 @@
-# REQuiem
+# Req
 
-Make HTTP requests using simple JSON template documents.
+Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongisde a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
 
-## Installation
+## Installation & using the CLI client.
 
-Clone the repo, then use Composer to install the dependencies.
+The `req` binary has a view dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
+
+```shell
+curl -s http://getcomposer.org/installer | php
+```
+
+In the root directory of the projects, then simply run:
+
+```shell
+php composer.phar install
+```
+
+To install the dependencies.
 
 You can then, if you like, use it from within the folder by calling `./req my-request.json`, or you can make it available system wide by symlinking it somewhere into your path:
 
