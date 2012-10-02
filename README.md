@@ -2,9 +2,15 @@
 
 Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongisde a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
 
-## Installation & using the CLI client.
+## Installation.
 
-The `req` binary has a view dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
+If you're wanting to use the `Req` class by itself, simply do the following:
+
+```php
+include 'src/req.php';
+```
+
+If you're wanting to also use the `req` binary, it has a view dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
 
 ```shell
 curl -s http://getcomposer.org/installer | php
