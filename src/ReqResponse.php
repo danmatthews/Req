@@ -2,13 +2,37 @@
 
 class ReqResponse {
 
+	/**
+	 * An array of headers in name => value format
+	 * @var array
+	 */
 	public $headers;
 
+	/**
+	 * The returned response body
+	 * @var string
+	 */
 	public $body;
 
+	/**
+	 * Curl's info array
+	 * @var array
+	 */
 	public $info;
 
-	public function __construct($body, $headers, $info)
+	/**
+	 * HTTP1.0 Status Code
+	 * @var int
+	 */
+	public $status_code;
+
+	/**
+	 * Total request time
+	 * @var float
+	 */
+	public $time;
+
+	public function __construct($body, $info)
 	{
 
 		list($headers, $body) = explode("\r\n\r\n", $body);
@@ -31,11 +55,26 @@ class ReqResponse {
 		$this->headers = $headerList;
 
 		$this->info = $info;
+
+		$this->status_code = (int)$info['http_code'];
+
+		$this->time = (float)number_format ($info['total_time'],2);
 	}
 
+	/**
+	 * Prints a debugging display of this object.
+	 */
 	public function inspect()
 	{
 		echo '<pre>'.print_r($this,1).'</pre>';
+	}
+
+	/**
+	 * If you try to echo this object, just echo the body string.
+	 * @return string The response body.
+	 */
+	public function __tostring() {
+		return $this->body;
 	}
 
 }

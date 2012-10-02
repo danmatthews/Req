@@ -1,5 +1,7 @@
 <?php
 
+include 'ReqResponse.php';
+
 /**
  * Req is a wrapper class for cURL, to make working with and making requests easier.
  */
@@ -16,6 +18,16 @@ class Req {
 		$this->opts['url'] = $url;
 	}
 
+	public static function forge($url = null)
+	{
+		return new static ($url);
+	}
+
+	public function url ($url)
+	{
+		$this->opts['url'] = $url;
+	}
+
 	public function get ($params = null)
 	{
 		return $this->make('GET', $params);
@@ -26,6 +38,12 @@ class Req {
 		return $this->make('POST', $params);
 	}
 
+	public function headers($headers)
+	{
+		$this->opts['headers'] = $headers;
+		return $this;
+	}
+
 	/**
 	 * Send the request.
 	 */
@@ -34,7 +52,7 @@ class Req {
 
 		$errors = $this->validate();
 
-		if (empty($errors))
+		if (empty ($errors))
 		{
 
 			$curl = curl_init($this->opts['url']);
@@ -47,13 +65,14 @@ class Req {
 
 			if (isset($this->opts['headers']) && count($this->opts['headers']) > 0)
 			{
-				curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers());
+				curl_setopt($curl, CURLOPT_HTTPHEADER, $this->buildHeaders());
 			}
 
 			if (strtolower ($type) == 'post')
 			{
+				$data = is_string($params) ? $params : $this->serializeData($params);
 				curl_setopt($curl, CURLOPT_POST, 1);
-				curl_setopt($curl, CURLOPT_POSTFIELDS, $this->serializeData($params));
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 			}
 			else
 			{
@@ -66,18 +85,18 @@ class Req {
 
 			curl_close($curl);
 
-			return new ReqResponse($body, array(), $info);
+			return new ReqResponse($body, $info);
 
 		}
 
 	}
 
-	public function headers()
+	protected function buildHeaders()
 	{
 
 		$headers = array();
 
-		foreach ($this->opts->headers as $key => $value)
+		foreach ($this->opts['headers'] as $key => $value)
 		{
 			$headers[] = "{$key}: {$value}";
 		}
@@ -86,13 +105,22 @@ class Req {
 
 	}
 
-	function serializeData()
+	function serializeData($params, $base = null)
 	{
+
 		$formData = array();
 
-		foreach ($this->opts['data'] as $key => $value)
+		foreach ($params as $key => $value)
 		{
-			$formData[] = "$key=$value";
+			if (is_array($value))
+			{
+				$formData[] = $this->serializeData($value, $key);
+			}
+			else
+			{
+				$formData[] = $base ? "{$base}[{$key}]={$value}" : "$key=$value";
+			}
+
 		}
 
 		return implode("&", $formData);

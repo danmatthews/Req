@@ -1,19 +1,25 @@
 <?php
 
 include 'src/Req.php';
-include 'src/ReqResponse.php';
+
+$token  = 'e6eebda1-bb30-6e07-ab4b-1e380df6423d';
+
+$secret = 'yz17wv0eelosm7s1zioijyig9bcp8q2mx765wgxb6ivgo28wb5';
 
 $opts = array(
-	'url' => 'http://danmatthews.me',
 	'method' => 'get',
 	'headers' => array(
-		'Content-type' => 'text/json',
-		'Accept' => 'application/json',
+		// 'Content-type' => 'application/json',
+		// 'Accept' => 'application/json',
+		'X-Auth-Token' => $token,
+		'X-Auth-Secret' => $secret,
 	),
 );
 
-$req = new Req('http://twitter.com/danmatthews');
+$headers = $opts['headers'];
 
-$response = $req->get();
+$response = Req::forge("https://api.sirportly.com/api/v1/tickets/search")
+				->headers($headers)
+				->post(array('query' => array('id' => 94971)));
 
-echo $response->body;
+$response->inspect();

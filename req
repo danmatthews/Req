@@ -9,52 +9,40 @@ $cmd = new Commando\Command();
 
 //Add the filename argument
 $cmd->option()
-	->referToAs('Filename: ')
-	->describedAs("The request JSON file")
-	->require()
-	->must(function($filename)
-	{
+    ->referToAs('Filename: ')
+    ->describedAs("The request JSON file");
 
-		// Load the file, check that it exists.
-		if (!is_file($filename))
-		{
-			return false;
-		}
+// Get a colors instance.
+$c = new \Colors\Color();
 
-		$contents = file_get_contents($filename);
+// Declare the response variable, save it for later.
+$response;
 
-		if (!is_string($contents) || strlen($contents) < 2)
-		{
-			return false;
-		}
-
-		$json = json_decode($contents);
-
-		if (!is_object($json) && !is_array($json))
-		{
-			return false;
-		}
-
-		return true;
-
-	});
-
-// Add a 'test only' mode.
-$cmd->option('v')
-	->aka('validate-only')
-	->boolean();
-
-$req = new Requiem($cmd[0]);
-
-if ($cmd['v'] ==1)
+if (empty($cmd[0])) {
+    echo $c("Please provide a JSON file or valid URL as the first argument")->red().PHP_EOL;
+}
+else
 {
-	if (!$req->validate()) {
+    if (filter_var($cmd[0], FILTER_VALIDATE_URL)) {
+        // GET the URL.
+        $response = Req::forge($cmd[0])->get();
+    }
+    else {
+        // Check it's a file.
+        if (!is_file($cmd[0]))
+        {
+            print $c("Invalid argument 0:")->white()->highlight('red').PHP_EOL;
+            print $c("  Using a request JSON file? Check that the filepath exists.")->yellow().PHP_EOL;
+            print $c("  Using a URL? Check that you've included the http:// or https:// prefix.")->yellow().PHP_EOL;
+        }
+        else
+        {
+            // get contents, execute a request based on them.
+        }
+    }
+}
 
-	}
-}
-else {
-	$req->makeRequest();
-}
+echo $response.PHP_EOL;
 
 
 

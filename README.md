@@ -4,14 +4,13 @@ Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to ma
 
 ## Installation.
 
-If you're wanting to use the `Req` class by itself, simply do the following, don't forget to include the `ReqResponse` class too!
+If you're wanting to use the `Req` class by itself, simply do the following, this will also include the `ReqResponse` class too.
 
 ```php
 include 'src/Req.php';
-include 'src/ReqResponse.php';
 ```
 
-If you're wanting to also use the `req` binary, it has a view dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
+If you're wanting to also use the `req` binary, it has a few dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
 
 ```shell
 curl -s http://getcomposer.org/installer | php
@@ -31,7 +30,74 @@ You can then, if you like, use it from within the folder by calling `./req my-re
 sudo ln -s /path/to/req /usr/local/bin/req
 ```
 
+which means you can use it system-wide like any other command:
+
+```shell
+req <filename> / <url>
+```
+
 ## Usage
+
+### The PHP Class.
+
+The class simply wraps PHP's cURL library, but makes it much easier to use, for example, send a GET request like so:
+
+```php
+$req = new Req("http://mysite.com");
+$response = $req->get();
+```
+
+Or do it in one line like:
+
+```php
+$response = Req::forge("http://mysite.com")->get();
+```
+
+#### Setting headers
+
+Pass headers as an associative array like so:
+
+```php
+$req = new Req("http://mysite.com");
+
+$headers = array(
+	'Content-type' => 'text/html',
+	'X-Custom-Header' => 'Value',
+);
+
+$response = $req->headers($headers)->get();
+```
+
+#### Setting POST Data
+
+The `post()` method in `Req` will accept a `string`, or `array` of POST data as it's first argument, string values will not be altered, so you can pass custom data like XML or JSON straight in there, but arrays will be serialized as POST data for you.
+
+An example simply POST request:
+
+```php
+$req = new Req('http://mysite.com');
+
+$postData = array('foo' => 'bar', 'woo' => 'sa');
+
+// Will serialize $postData into foo=bar&woo=sa
+$req->post($postData);
+```
+
+You can also pass a string of JSON, or XML data:
+
+```php
+$req = Req::forge('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
+```
+
+Or even a file (which is essentially what the `req` command line tool does):
+
+```php
+$filepath = '/path/to/my/file';
+$contents = file_get_contents($filepath);
+$req = Req::forge('http://mysite.com')->post($contents);
+```
+
+### Command Line
 
 Create a `requestfile`, which is just simple, valid JSON document, that includes all information for the request. These documents must be valid JSON, and can't include comments. The only parameter that is required is the `url` parameter:
 
@@ -54,6 +120,5 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 ## TODO
 
 * Include Examples
-* Nested POST data handling.
 * Use another file to supply the `data` for the request for XML and larger JSON/YML/HTML requests.
 * Intelligent data rendering, eg: `Content-type: application/json` will send data JSON encoded, and `Accept: application/json` will decode returned JSON etc etc.
