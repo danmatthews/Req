@@ -101,10 +101,10 @@ $req = Req::forge('http://mysite.com')->post($contents);
 
 Create a `requestfile`, which is just simple, valid JSON document, that includes all information for the request. These documents must be valid JSON, and can't include comments. The only parameter that is required is the `url` parameter:
 
-```json
+```javascript
 {
 	"url":"http://example.com",
-	"method":"get/post",
+	"method":"get/post", // Currently only supports get & post.
 	"headers": {
 		"Content-type" : "application/json",
 		"Accept" : "application/json",
