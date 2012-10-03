@@ -117,8 +117,26 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 }
 ```
 
+Then to send a request, just do:
+
+```shell
+./req my_requestfile.json
+```
+And you can pipe the output to a file.
+
+```shell
+./req my_requestfile.json > my_output.txt
+```
+
+####Passing data using a second filename.
+
+`req` accepts a second argument that will provide the POST data as a string, this will supersede any data supplied in the `data: {}` part of your requestfile.
+
+```shell
+./req my_requestfile.json my_data.xml
+```
+
 ## TODO
 
 * Include Examples
-* Use another file to supply the `data` for the request for XML and larger JSON/YML/HTML requests.
 * Intelligent data rendering, eg: `Content-type: application/json` will send data JSON encoded, and `Accept: application/json` will decode returned JSON etc etc.
