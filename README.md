@@ -138,5 +138,7 @@ And you can pipe the output to a file.
 
 ## TODO
 
-* Include Examples
+* Tests tests tests!
+* Error handling & exceptions
+* Include examples
 * Intelligent data rendering, eg: `Content-type: application/json` will send data JSON encoded, and `Accept: application/json` will decode returned JSON etc etc.
