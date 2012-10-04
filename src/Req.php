@@ -150,7 +150,9 @@ class Req {
 		return $errors;
 
 	}
-
+	/**
+	 * Internal inspect method
+	 */
 	public function inspect()
 	{
 		echo '<pre>';
