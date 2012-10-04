@@ -52,4 +52,44 @@ class RequiemTest extends PHPUnit_Framework_TestCase {
 
 	}
 
+	public function testChangeUrl()
+	{
+		$initialUrl = 'http://example.com/1';
+		$changedUrl = 'http://example.com/2';
+
+		$req = new Req($initialUrl);
+		$req->url($changedUrl);
+
+		$this->assertEquals($req->opts['url'], $changedUrl);
+	}
+
+	public function testBuildHeadersString()
+	{
+		$headers = array(
+			'Content-type' => 'application/json',
+			'X-Test-Custom' => 'application-name',
+		);
+
+		$stringvals = array(
+			'Content-type: application/json',
+			'X-Test-Custom: application-name',
+		);
+
+		// Use Reflection Method to test this, as it's a protected function.
+		$method = new ReflectionMethod('Req', 'buildHeaders');
+
+		$method->setAccessible(true);
+
+		$req = new Req("http://example.com");
+
+		$req->headers($headers);
+
+		$result = $method->invoke($req);
+
+		$this->assertEquals($result[0], $stringvals[0]);
+
+		$this->assertEquals($result[1], $stringvals[1]);
+
+	}
+
 }
