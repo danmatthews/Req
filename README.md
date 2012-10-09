@@ -2,62 +2,30 @@
 
 # Req
 
-Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongside a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
+Make making requests with PHP suck less.
 
-## Installation.
+Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongside a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
 
-If you're wanting to use the `Req` class by itself, simply do the following, this will also include the `ReqResponse` class too.
+Check out the docs for more detailed information and installation instructions.
 
-```php
-include 'src/Req.php';
-```
+# Why?
 
-If you're wanting to also use the `req` binary, it has a few dependencies that are managed with [Composer](https://github.com/composer/composer), in order to use it, you must install the composer executable by typing:
+The Req PHP class is just a lovely little convenient wrapper for sending requests, but when paired with the command line utility, will allow you template HTTP requests, pipe their output, and feed in contents of files directly from any directory on your computer.
 
-```shell
-curl -s http://getcomposer.org/installer | php
-```
+# Where?
 
-In the root directory of the projects, then simply run:
+Req is available as a [composer](http://getcomposer.org/) installable [package](https://packagist.org/packages/danmatthews/req), and will work with any PHP 5.3+ environment with php-curl installed. Req is continously tested [on Travis-CI](http://travis-ci.org/danmatthews/Req).
 
-```shell
-php composer.phar install
-```
+## Some quick examples
 
-To install the dependencies.
-
-You can then, if you like, use it from within the folder by calling `./req my-request.json`, or you can make it available system wide by symlinking it somewhere into your path:
-
-```shell
-sudo ln -s /path/to/req /usr/local/bin/req
-```
-
-which means you can use it system-wide like any other command:
-
-```shell
-req <filename> / <url>
-```
-
-## Usage
-
-### The PHP Class.
-
-The class simply wraps PHP's cURL library, but makes it much easier to use, for example, send a GET request like so:
+Send a GET request:
 
 ```php
 $req = new Req("http://mysite.com");
 $response = $req->get();
 ```
 
-Or do it in one line like:
-
-```php
-$response = Req::forge("http://mysite.com")->get();
-```
-
-#### Setting headers
-
-Pass headers as an associative array like so:
+Set headers:
 
 ```php
 $req = new Req("http://mysite.com");
@@ -70,11 +38,7 @@ $headers = array(
 $response = $req->headers($headers)->get();
 ```
 
-#### Setting POST Data
-
-The `post()` method in `Req` will accept a `string`, or `array` of POST data as it's first argument, string values will not be altered, so you can pass custom data like XML or JSON straight in there, but arrays will be serialized as POST data for you.
-
-An example simply POST request:
+Set post data:
 
 ```php
 $req = new Req('http://mysite.com');
@@ -85,7 +49,7 @@ $postData = array('foo' => 'bar', 'woo' => 'sa');
 $req->post($postData);
 ```
 
-You can also pass a string of JSON, or XML data:
+You can also pass a string of data:
 
 ```php
 $req = Req::forge('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
@@ -106,7 +70,7 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 ```javascript
 {
 	"url":"http://example.com",
-	"method":"get/post", // Currently only supports get & post.
+	"method":"get/post",
 	"headers": {
 		"Content-type" : "application/json",
 		"Accept" : "application/json",
@@ -119,28 +83,10 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 }
 ```
 
-Then to send a request, just do:
+Then send the templated request with:
 
 ```shell
 ./req my_requestfile.json
 ```
-And you can pipe the output to a file.
 
-```shell
-./req my_requestfile.json > my_output.txt
-```
-
-####Passing data using a second filename.
-
-`req` accepts a second argument that will provide the POST data as a string, this will supersede any data supplied in the `data: {}` part of your requestfile.
-
-```shell
-./req my_requestfile.json my_data.xml
-```
-
-## TODO
-
-* Tests tests tests!
-* Error handling & exceptions
-* Include examples
-* Intelligent data rendering, eg: `Content-type: application/json` will send data JSON encoded, and `Accept: application/json` will decode returned JSON etc etc.
+Simple!
