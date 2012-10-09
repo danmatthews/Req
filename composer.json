@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Make making requests with PHP suck less",
     "keywords": ["request","post","get","curl","rest"],
-    "homepage": "http://github.com/Seldaek/monolog",
+    "homepage": "http://github.com/danmatthews/req",
     "license": "MIT",
     "authors": [
         {
