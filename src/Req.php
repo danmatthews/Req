@@ -20,20 +20,20 @@ class Req {
 
 	public static function forge($url = null)
 	{
-		return new static ($url);
+		return new static($url);
 	}
 
-	public function url ($url)
+	public function url($url)
 	{
 		$this->opts['url'] = $url;
 	}
 
-	public function get ($params = null)
+	public function get($params = null)
 	{
 		return $this->make('GET', $params);
 	}
 
-	public function post ($params = null)
+	public function post($params = null)
 	{
 		return $this->make('POST', $params);
 	}
@@ -150,7 +150,9 @@ class Req {
 		return $errors;
 
 	}
-
+	/**
+	 * Internal inspect method
+	 */
 	public function inspect()
 	{
 		echo '<pre>';

@@ -1,6 +1,8 @@
+[![Build Status](https://secure.travis-ci.org/danmatthews/Req.png)](http://travis-ci.org/danmatthews/Req)
+
 # Req
 
-Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongisde a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
+Pronounced 'Wreck'. Req has two components, a PHP class usable on it's own to make HTTP requests, and a command-line binary that is used alongside a JSON document to specify request details, and can also take a second filename argument that will be used as the request body.
 
 ## Installation.
 
@@ -101,10 +103,10 @@ $req = Req::forge('http://mysite.com')->post($contents);
 
 Create a `requestfile`, which is just simple, valid JSON document, that includes all information for the request. These documents must be valid JSON, and can't include comments. The only parameter that is required is the `url` parameter:
 
-```json
+```javascript
 {
 	"url":"http://example.com",
-	"method":"get/post",
+	"method":"get/post", // Currently only supports get & post.
 	"headers": {
 		"Content-type" : "application/json",
 		"Accept" : "application/json",
@@ -117,8 +119,28 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 }
 ```
 
+Then to send a request, just do:
+
+```shell
+./req my_requestfile.json
+```
+And you can pipe the output to a file.
+
+```shell
+./req my_requestfile.json > my_output.txt
+```
+
+####Passing data using a second filename.
+
+`req` accepts a second argument that will provide the POST data as a string, this will supersede any data supplied in the `data: {}` part of your requestfile.
+
+```shell
+./req my_requestfile.json my_data.xml
+```
+
 ## TODO
 
-* Include Examples
-* Use another file to supply the `data` for the request for XML and larger JSON/YML/HTML requests.
+* Tests tests tests!
+* Error handling & exceptions
+* Include examples
 * Intelligent data rendering, eg: `Content-type: application/json` will send data JSON encoded, and `Accept: application/json` will decode returned JSON etc etc.
