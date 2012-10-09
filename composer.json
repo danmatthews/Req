@@ -1,5 +1,20 @@
 {
-	"require": {
-	    "nategood/commando": "*"
-	}
+    "name": "danmatthews/req",
+    "type": "library",
+    "description": "Make making requests with PHP suck less",
+    "keywords": ["request","post","get","curl","rest"],
+    "homepage": "http://github.com/Seldaek/monolog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Matthews",
+            "email": "dan@danmatthews.me",
+            "homepage": "http://danmatthews.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "nategood/commando" : "*"
+    }
 }
