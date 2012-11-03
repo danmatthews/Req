@@ -81,7 +81,7 @@ class Req {
 			}
 			else if (strtolower ($type) == 'head')
 			{
-				curl_setopt($curl, CURLOPT_NOBODY, TRUE);
+				curl_setopt($curl, CURLOPT_NOBODY, 1);
 			}
 			else
 			{

@@ -92,13 +92,4 @@ class ReqTest extends PHPUnit_Framework_TestCase {
 
 	}
 
-	public function testHeadMethod()
-	{
-		$req = new Req("http://google.com");
-
-		$response = $req->head();
-
-		$this->assertTrue(empty($response->body));
-	}
-
 }
