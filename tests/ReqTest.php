@@ -3,7 +3,7 @@
 require dirname(__FILE__).'/../vendor/autoload.php';
 require dirname(__FILE__).'/../src/Req.php';
 
-class RequiemTest extends PHPUnit_Framework_TestCase {
+class ReqTest extends PHPUnit_Framework_TestCase {
 
 	public function testConstruct()
 	{
@@ -90,6 +90,15 @@ class RequiemTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals($result[1], $stringvals[1]);
 
+	}
+
+	public function testHeadMethod()
+	{
+		$req = new Req("http://google.com");
+
+		$response = $req->head();
+
+		$this->assertTrue(empty($response->body));
 	}
 
 }

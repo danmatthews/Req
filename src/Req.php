@@ -28,9 +28,9 @@ class Req {
 		$this->opts['url'] = $url;
 	}
 
-	public function get($params = null)
+	public function get()
 	{
-		return $this->make('GET', $params);
+		return $this->make('GET');
 	}
 
 	public function post($params = null)
@@ -42,6 +42,11 @@ class Req {
 	{
 		$this->opts['headers'] = $headers;
 		return $this;
+	}
+
+	public function head()
+	{
+		return $this->make('HEAD');
 	}
 
 	/**
@@ -73,6 +78,10 @@ class Req {
 				$data = is_string($params) ? $params : $this->serializeData($params);
 				curl_setopt($curl, CURLOPT_POST, 1);
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			}
+			else if (strtolower ($type) == 'head')
+			{
+				curl_setopt($curl, CURLOPT_NOBODY, TRUE);
 			}
 			else
 			{
