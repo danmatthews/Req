@@ -1,0 +1,94 @@
+#!/usr/bin/php
+<?php
+
+require dirname(__FILE__).'/vendor/autoload.php';
+require dirname(__FILE__).'/src/Req.php';
+
+// Create a commando command.
+$cmd = new Commando\Command();
+
+//Add the filename argument
+$cmd->option()
+    ->referToAs('Filename: ')
+    ->describedAs("The request JSON file");
+
+// Add the datafile argument.
+$cmd->option()
+    ->referToAs('Data File: ')
+    ->describedAs("The data file, will be sent as is.");
+
+// Get a colors instance.
+$c = new \Colors\Color();
+
+// Declare the response variable, save it for later.
+$response = '';
+
+if (empty($cmd[0])) {
+    echo $c("Please provide a JSON file or valid URL as the first argument")->red().PHP_EOL;
+}
+else
+{
+    if (filter_var($cmd[0], FILTER_VALIDATE_URL)) {
+        // GET the URL.
+        $response = Req::forge($cmd[0])->get();
+    }
+    else {
+        // Check it's a file.
+        if (!is_file($cmd[0]))
+        {
+            print $c("Invalid argument 0:")->white()->highlight('red').PHP_EOL;
+            print $c("Using a request JSON file? Check that the filepath exists.")->yellow().PHP_EOL;
+            print $c("Using a URL? Check that you've included the http:// or https:// prefix.")->yellow().PHP_EOL;
+        }
+        else
+        {
+            // We know it's a file.
+            $contents = file_get_contents($cmd[0]);
+
+            $json = json_decode($contents);
+
+            // Attempt to parse the JSON.
+            if (!is_null($json))
+            {
+                // The only thing we require is the URL.
+                if (!isset($json->url))
+                {
+                    echo $c("No 'url' value provided, where will we send the request?")->red().PHP_EOL;
+                }
+                else if (isset($json->method) && !in_array(strtolower($json->method), array('get', 'post')))
+                {
+                    echo $c("No compatible method supplied, must be 'get' or 'post'.")->red().PHP_EOL;
+                }
+                else
+                {
+                    $req = Req::forge($json->url);
+
+                    if (isset($json->headers) && count($json->headers) > 0)
+                    {
+                        $req->headers((array)$json->headers);
+                    }
+                    if (!isset($json->method) || strtolower($json->method) == 'get')
+                    {
+                        $response = $req->get();
+                    }
+                    else if (strtolower($json->method) == 'post')
+                    {
+                        $data_file = isset($cmd[1]) && !empty($cmd[1]) ? file_get_contents($cmd[1]) : null;
+                        $json_data = isset($json->data) && count($json->data) > 0 ? $json->data : null;
+                        $data = $data_file ? (string)$data_file : (array)$json_data;
+                        $response = $req->post($data);
+                    }
+                }
+            }
+            else
+            {
+                echo $c("The file '{$cmd[0]}' does not appear to contain valid JSON.")->red().PHP_EOL;
+            }
+        }
+    }
+}
+
+echo isset($response) ? $response.PHP_EOL : '';
+
+
+
