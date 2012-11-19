@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
 
-require dirname(__FILE__).'/vendor/autoload.php';
-require dirname(__FILE__).'/src/Req.php';
+require dirname(__FILE__).'../vendor/autoload.php';
+require dirname(__FILE__).'../src/Req.php';
 
 // Create a commando command.
 $cmd = new Commando\Command();
@@ -89,6 +89,3 @@ else
 }
 
 echo isset($response) ? $response.PHP_EOL : '';
-
-
-
