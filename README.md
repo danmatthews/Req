@@ -83,10 +83,21 @@ Create a `requestfile`, which is just simple, valid JSON document, that includes
 }
 ```
 
-Then send the templated request with:
+Then send the templated request with the `make` command:
 
 ```shell
-./req my_requestfile.json
+./req make my_requestfile.json
 ```
+
+You can also provide a file as a second argument that will be substituted in as the POST data, this will be POSTed as a string:
+
+```shell
+# Either:
+./req make <url> <filepath>
+# Or:
+./req make <request filename> <filepath>
+```
+
+
 
 Simple!

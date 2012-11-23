@@ -15,7 +15,7 @@ class ReqCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('req')
+        $this->setName('make')
         ->setDescription('Make a request using the CLI')
         ->addArgument(
             'filename',
@@ -29,7 +29,7 @@ class ReqCommand extends Command
         )
         ->addOption(
             'inspect',
-            null,
+            'i',
             InputOption::VALUE_NONE,
             "Print the request data to the terminal"
         );
