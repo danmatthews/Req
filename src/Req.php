@@ -1,9 +1,9 @@
 <?php
 
 include 'ReqResponse.php';
-
+include 'ReqException.php';
 /**
- * Req is a wrapper class for cURL, to make working with and making requests easier.
+ * Req is a wrapper class for cURL, to make working with, and making requests easier.
  */
 class Req {
 
@@ -15,7 +15,7 @@ class Req {
 
 	public function __construct($url = null)
 	{
-		$this->opts['url'] = $url;
+		$this->opts['url'] = $url ? $url : null;
 	}
 
 	public static function forge($url = null)
@@ -26,6 +26,7 @@ class Req {
 	public function url($url)
 	{
 		$this->opts['url'] = $url;
+		return $this;
 	}
 
 	public function get()
@@ -97,6 +98,10 @@ class Req {
 			return new ReqResponse($body, $info);
 
 		}
+		else
+		{
+			throw new ReqException($errors);
+		}
 
 	}
 
@@ -144,29 +149,23 @@ class Req {
 
 		$errors = array();
 
-		if (!isset($this->opts['url'])) {
+		if (!isset($this->opts['url']))
+		{
 			$errors[] = "No URL parameter was present.";
 		}
 
-		if (!isset($this->opts['method'])) {
+		if (!isset($this->opts['method']))
+		{
 			$this->opts['method'] = 'get';
 		}
 
-		if (isset($this->opts['headers']) && !is_array($this->opts['headers'])) {
+		if (isset($this->opts['headers']) && !is_array($this->opts['headers']))
+		{
 			$errors[] = "The headers property is set, but is not an array.";
 		}
 
 		return $errors;
 
-	}
-	/**
-	 * Internal inspect method
-	 */
-	public function inspect()
-	{
-		echo '<pre>';
-		print_r ($this);
-		echo '</pre>';
 	}
 
 }
