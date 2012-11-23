@@ -1,8 +1,0 @@
-{
-	"url" : "http://requestb.in/15eijrc1",
-	"method" : "post",
-	"headers" : {
-		"content-type" : "application/yaml"
-	},
-	"data" : "This is some text"
-}
