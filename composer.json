@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "nategood/commando" : "*"
+        "symfony/console" : "*"
     },
     "autoload": {
         "classmap": ["src/"]
