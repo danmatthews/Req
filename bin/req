@@ -54,13 +54,13 @@ class ReqCommand extends Command
                 else
                 {
                     // Send a POST request with this as the data.
-                    $response = Req::forge($filename_or_url)->post(file_get_contents($dataFile));
+                    $response = Req::create($filename_or_url)->post(file_get_contents($dataFile));
                 }
             }
             else
             {
                 // Just GET the URL.
-                $response = Req::forge($filename_or_url)->get();
+                $response = Req::create($filename_or_url)->get();
             }
         }
         else
@@ -91,7 +91,7 @@ class ReqCommand extends Command
                 }
                 else
                 {
-                    $req = Req::forge($json->url);
+                    $req = Req::create($json->url);
 
                     if (isset($json->headers) && count($json->headers) > 0)
                     {

@@ -52,7 +52,7 @@ $response = $req->get();
 Or do it in one line like:
 
 ```php
-$response = Req::forge("http://mysite.com")->get();
+$response = Req::create("http://mysite.com")->get();
 ```
 
 #### Setting headers
@@ -88,7 +88,7 @@ $req->post($postData);
 You can also pass a string of JSON, or XML data:
 
 ```php
-$req = Req::forge('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
+$req = Req::create('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
 ```
 
 Or even a file (which is essentially what the `req` command line tool does):
@@ -96,7 +96,7 @@ Or even a file (which is essentially what the `req` command line tool does):
 ```php
 $filepath = '/path/to/my/file';
 $contents = file_get_contents($filepath);
-$req = Req::forge('http://mysite.com')->post($contents);
+$req = Req::create('http://mysite.com')->post($contents);
 ```
 
 ### Command Line

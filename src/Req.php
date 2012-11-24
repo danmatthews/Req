@@ -1,11 +1,14 @@
 <?php
 
-include 'ReqResponse.php';
-include 'ReqException.php';
 /**
  * Req is a wrapper class for cURL, to make working with, and making requests easier.
  */
 class Req {
+
+	/**
+	 * Auth types as constants
+	 */
+	const REQ_AUTH_BASIC = 1;
 
 	/**
 	 * Stores the request options.
@@ -13,12 +16,34 @@ class Req {
 	 */
 	public $opts;
 
+	/**
+	 * Only basic auth supported for now.
+	 * @var string
+	 */
+	protected $_authtype;
+
+	/**
+	 * Credentials for auth.
+	 * @var array
+	 */
+	protected $_credentials = array();
+
 	public function __construct($url = null)
 	{
 		$this->opts['url'] = $url ? $url : null;
 	}
 
-	public static function forge($url = null)
+	public function basicAuth($username, $password)
+	{
+		$this->_authtype = self::REQ_AUTH_BASIC;
+		$this->_credentials = array(
+			'username' => $username,
+			'password' => $password,
+		);
+		return $this;
+	}
+
+	public static function create($url = null)
 	{
 		return new static($url);
 	}
@@ -68,6 +93,11 @@ class Req {
 			curl_setopt($curl, CURLOPT_HEADER, 1);
 
 			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+			if ($this->_authtype == self::REQ_AUTH_BASIC)
+			{
+				curl_setopt($curl, CURLOPT_USERPWD, $this->_credentials['username'] . ":" . $this->_credentials['password']);
+			}
 
 			if (isset($this->opts['headers']) && count($this->opts['headers']) > 0)
 			{

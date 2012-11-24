@@ -11,9 +11,9 @@ class ReqTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($req instanceof Req);
 	}
 
-	public function testForge()
+	public function testcreate()
 	{
-		$req = Req::forge();
+		$req = Req::create();
 		$this->assertTrue($req instanceof Req);
 	}
 
