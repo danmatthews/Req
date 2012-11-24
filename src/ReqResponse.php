@@ -62,14 +62,6 @@ class ReqResponse {
 	}
 
 	/**
-	 * Prints a debugging display of this object.
-	 */
-	public function inspect()
-	{
-		echo '<pre>'.print_r($this,1).'</pre>';
-	}
-
-	/**
 	 * If you try to echo this object, just echo the body string.
 	 * @return string The response body.
 	 */
