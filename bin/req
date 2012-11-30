@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 use Symfony\Component\Console\Command\Command;
@@ -8,8 +8,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Application;
 
-require dirname(__FILE__).'/../vendor/autoload.php';
-require dirname(__FILE__).'/../src/Req.php';
+if (is_dir($vendor = __DIR__.'/../vendor'))
+{
+    require($vendor.'/autoload.php');
+}
+else if (is_dir($vendor = __DIR__.'/../../../../vendor'))
+{
+    require($vendor.'/autoload.php');
+}
+else
+{
+    die(
+        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL
+    );
+}
 
 class ReqCommand extends Command
 {
