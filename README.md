@@ -8,7 +8,9 @@ Req has two components, a PHP class usable on it's own to make HTTP requests, an
 
 Check out the docs for more detailed information and installation instructions.
 
-# Why?
+## What does it do?
+
+POST, GET and custom verb requests (through use of the `make()` method.
 
 The Req PHP class is just a lovely little convenient wrapper for sending requests, but when paired with the command line utility, will allow you template HTTP requests, pipe their output, and feed in contents of files directly from any directory on your computer.
 

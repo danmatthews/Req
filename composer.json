@@ -18,7 +18,9 @@
         "symfony/console" : "*"
     },
     "autoload": {
-        "classmap": ["src/"]
+        "psr-0": {
+            "Req": "src/"
+        }
     },
     "bin": ["bin/req"]
 }
