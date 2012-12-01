@@ -10,27 +10,36 @@ Check out the docs for more detailed information and installation instructions.
 
 ## What does it do?
 
-POST, GET and custom verb requests (through use of the `make()` method.
+POST, GET and custom verb requests (through use of the `make()` method. It's designed to be light-weight, and not as hefty as other HTTP libraries like [Guzzle](http://github.com/guzzle/guzzle). It supports HTTP-BASIC auth.
 
 The Req PHP class is just a lovely little convenient wrapper for sending requests, but when paired with the command line utility, will allow you template HTTP requests, pipe their output, and feed in contents of files directly from any directory on your computer.
 
-# Where?
+## Install with composer.
 
-Req is available as a [composer](http://getcomposer.org/) installable [package](https://packagist.org/packages/danmatthews/req), and will work with any PHP 5.3+ environment with php-curl installed. Req is continously tested [on Travis-CI](http://travis-ci.org/danmatthews/Req).
+Req is available as a PSR-0 [composer](http://getcomposer.org/) installable [package](https://packagist.org/packages/danmatthews/req), and will work with any PHP 5.3+ environment with php-curl installed. Req is continously tested [on Travis-CI](http://travis-ci.org/danmatthews/Req).
+
+Just add this to your `composer.json`:
+```json
+{
+	"require": {
+		"req/req": "1.1.*"
+	}
+}
+```
 
 ## Some quick examples
 
 Send a GET request:
 
 ```php
-$req = new Req("http://mysite.com");
+$req = new Req\Req("http://mysite.com");
 $response = $req->get();
 ```
 
 Set headers:
 
 ```php
-$req = new Req("http://mysite.com");
+$req = new Req\Req("http://mysite.com");
 
 $headers = array(
 	'Content-type' => 'text/html',
@@ -43,7 +52,7 @@ $response = $req->headers($headers)->get();
 Set post data:
 
 ```php
-$req = new Req('http://mysite.com');
+$req = new Req\Req('http://mysite.com');
 
 $postData = array('foo' => 'bar', 'woo' => 'sa');
 
@@ -54,7 +63,7 @@ $req->post($postData);
 You can also pass a string of data:
 
 ```php
-$req = Req::create('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
+$req = Req\Req::create('http://mysite.com')->post('<xml><item><title>Item1</title></item></xml>');
 ```
 
 Or even a file (which is essentially what the `req` command line tool does):
@@ -99,7 +108,5 @@ You can also provide a file as a second argument that will be substituted in as 
 # Or:
 ./req make <request filename> <filepath>
 ```
-
-
 
 Simple!

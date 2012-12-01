@@ -59,9 +59,9 @@ class Req
         return $this;
     }
 
-    public function get()
+    public function get($params = null)
     {
-        return $this->make('GET');
+        return $this->make('GET', $params);
     }
 
     public function post($params = null)
@@ -91,7 +91,7 @@ class Req
 
         if (empty($errors)) {
 
-            $curl = curl_init($this->opts['url']);
+            $curl = curl_init();
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
@@ -112,16 +112,26 @@ class Req
             }
 
             if (strtolower($type) == 'post') {
+
                 $data = is_string($params) ? $params : $this->serializeData($params);
                 curl_setopt($curl, CURLOPT_POST, 1);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
             } elseif (strtolower($type) == 'head') {
+
                 curl_setopt($curl, CURLOPT_NOBODY, 1);
+
             } elseif (strtolower($type) == 'get') {
+
+                $data = is_string($params) ? $params : $this->serializeData($params);
+                $this->opts['url'] = $this->opts['url'].'?'.$data;
                 curl_setopt($curl, CURLOPT_HTTPGET, true);
+
             } else {
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, strtoupper($type));
             }
+
+            curl_setopt($curl, CURLOPT_URL, $this->opts['url']);
 
             $body = curl_exec($curl);
 
