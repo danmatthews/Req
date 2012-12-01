@@ -3,3 +3,4 @@ composer.lock
 vendor
 request.json
 index.php
+build

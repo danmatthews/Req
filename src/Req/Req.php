@@ -36,6 +36,11 @@ class Req
         $this->opts['url'] = $url ? $url : null;
     }
 
+    public function setTimeout($timeout = 30)
+    {
+        $this->opts['timeout'] = $timeout;
+    }
+
     public function basicAuth($username, $password)
     {
         $this->authtype = self::REQ_AUTH_BASIC;
@@ -98,6 +103,10 @@ class Req
             curl_setopt($curl, CURLOPT_HEADER, 1);
 
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+            if (isset($this->opts['timeout'])) {
+                curl_setopt($curl, CURLOPT_TIMEOUT, $this->opts['timeout']);
+            }
 
             if ($this->authtype == self::REQ_AUTH_BASIC) {
                 curl_setopt(

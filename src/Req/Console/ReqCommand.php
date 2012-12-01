@@ -1,6 +1,6 @@
 <?php
-
 namespace Req\Console;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,7 +41,12 @@ class ReqCommand extends Command
             if ($dataFile) {
                 // Ensure it's a file.
                 if (!is_file($dataFile)) {
-                    $output->writeln('<error>The file you provided for the \'datafile\' argument doesn\'t seem to exist, please check and try again.</error>');
+
+                    $errormsg = '<error>The file you provided for the \'datafile\''
+                    .' argument doesn\'t seem to exist, please check and '
+                    .'try again.</error>';
+
+                    $output->writeln($errormsg);
                     exit(1);
                 } else {
                     // Send a POST request with this as the data.
