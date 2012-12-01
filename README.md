@@ -16,6 +16,10 @@ The Req PHP class is just a lovely little convenient wrapper for sending request
 
 ## Install with composer.
 
+```
+PLEASE NOTE: Namespace support is not available on the 1.0.x version.
+```
+
 Req is available as a PSR-0 [composer](http://getcomposer.org/) installable [package](https://packagist.org/packages/danmatthews/req), and will work with any PHP 5.3+ environment with php-curl installed. Req is continously tested [on Travis-CI](http://travis-ci.org/danmatthews/Req).
 
 Just add this to your `composer.json`:
